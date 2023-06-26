@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>江海区块链钱包</title>
+  <link href="/bootstrap.css" rel="stylesheet">
+</head>
+<style>
+  body {
+    width: 500px;
+    height: 60px;
+  }
+
+  .card {
+    margin-bottom: 20px;
+  }
+
+  .card-primary {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .card-secondary {
+    background-color: #6c757d;
+    color: #fff;
+  }
+
+  .card-header {
+    border-bottom: 1px solid #dee2e6;
+    font-weight: bold;
+  }
+
+  .card-body {
+
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .transaction-item {
+    border-bottom: 1px solid #dee2e6;
+    padding: 5px;
+  }
+</style>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+<script>
+
+</script>
+
+<body>
+  <!--参考文档 https://v5.bootcss.com/docs/getting-started/introduction/ -->
+  <div class="container">
+    <div class="row justify-content-center align-items-center g-2">
+      <div class="col"> 江海区块链钱包.</div>
+      <div class="col">
+        <div class="btn-group">
+
+
+          <select class="form-select form-select-lg mb-3" id="select_vale" aria-label=".form-select-lg example">
+            <option selected="">选择服务器</option>
+            <option value="http://127.0.0.1:5000">5000</option>
+            <option value="http://127.0.0.1:5001">5001</option>
+            <option value="http://127.0.0.1:5002">5002</option>
+          </select>
+
+        </div>
+
+      </div>
+      <hr>
+      <div class="col"> 当前账号：<p id="account"></p>
+      </div>
+      <hr>
+      <div class="col">余额：<p id="blance"></p>
+        <div class="col"><button type="button" id="getBlance" class="btn btn-danger btn-sm">获取余额</button></p>
+        </div>
+
+      </div>
+      <hr>
+
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+            type="button" role="tab" aria-controls="nav-home" aria-selected="true">账户信息</button>
+          <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
+            role="tab" aria-controls="nav-profile" aria-selected="false">转账</button>
+          <button class="nav-link  clickable" id="nav-contact-ta" data-bs-toggle="tab" data-bs-target="#nav-contact"
+            type="button" role="tab" aria-controls="nav-contact" aria-selected="false">区块信息</button>
+          <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-searching"
+            type="button" role="tab" aria-controls="nav-searching" aria-selected="false">检索</button>
+      </nav>
+    </div>
+
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+        <div class="mb-3">
+          <label for="inputPrivateKey" class="form-label">私钥</label>
+
+          <input type="text" class="form-control" id="inputPrivateKey" placeholder="私钥">
+        </div>
+
+        <div class="mb-3">
+
+          <button type="button" id="load_waller" class="btn btn-primary btn-sm">加载私钥</button>
+          <button type="button" id="rolad_waller" class="btn btn-warning btn-sm">随机生成</button>
+        </div>
+        <div class="mb-3">
+          <label for="inputPublic" class="form-label">公钥</label>
+          <input type="text" class="form-control" id="inputPublic" placeholder="公钥" disabled readonly>
+        </div>
+
+        <div class="mb-3">
+          <label for="inputAddress" class="form-label">账户地址</label>
+          <input type="text" class="form-control" id="inputAddress" placeholder="账户地址" readonly>
+        </div>
+
+      </div>
+
+
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+        <div class="mb-3">
+          <label for="inputReceiveAddress" class="form-label">接收者账户地址</label>
+          <input type="text" class="form-control" id="inputReceiveAddress" placeholder="接收者账户地址">
+        </div>
+        <div class="mb-3">
+          <label for="inputAmount" class="form-label">金额</label>
+          <input type="text" class="form-control" id="inputAmount" placeholder="金额">
+        </div>
+
+        <div class="mb-3 d-flex justify-content-center ">
+          <button type="submit" class="btn btn-primary ml-auto  " id="buttonSubmit">确认</button>
+
+        </div>
+      </div>
+      <div class="tab-pane fade container" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"
+        tabindex="0">
+      </div>
+
+      <div class="tab-pane fade container" id="nav-searching" role="tabpanel" aria-labelledby="nav-contact-tab"
+        tabindex="0">
+
+        <div class="container my-4">
+          <div class="row">
+            <div class="col">
+              <h1>Blockchain Search</h1>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col">
+              <form id="search-form" class="mb-4">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="search-input"
+                    placeholder="Enter blockNumber, blockHash, or transactionHash">
+                  <select class="form-select" id="search-type">
+                    <option value="blockNumber">Block Number</option>
+                    <option value="blockHash">Block Hash</option>
+                    <option value="transactionHash">Transaction Hash</option>
+                  </select>
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div id="search-results"></div>
+              <div id="error-message"></div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+  <script src="bootstrap.js"></script>
+</body>
+</body>
+
+</html>
